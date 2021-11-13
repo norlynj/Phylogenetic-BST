@@ -70,6 +70,7 @@ public class TreeOfLife {
             }
         } catch (Exception e){
             System.out.println("Invalid input...");
+            e.printStackTrace();
         }
     }
 

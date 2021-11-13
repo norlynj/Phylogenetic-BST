@@ -67,55 +67,120 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
         return root;
     }
 
-    @Override //a recursive function to delete an existing species in BST
+    @Override
     public PhylogeneticBSTNode deleteSpecies(PhylogeneticBSTNode root, Species species) {
-        //base case: if the tree is empty
-        if(root == null)
-            return root;
+        /*
+        * Three cases to consider when deleting a node
+        * 1. The node to be deleted is a leaf (has no children)
+        * 2. The node to be deleted has one child
+        * 3. The node to be deleted has two children
+        */
 
-        //otherwise, recur down the tree
-        if (species.getLineage() < root.getSpecieData().getLineage())
-            root.setLeftSpecieData(deleteSpecies(root.getLeftSpecieData(), species));
-        else if (species.getLineage() > root.getSpecieData().getLineage())
-            root.setRightSpecieData(deleteSpecies(root.getRightSpecieData(), species));
+        if(root == null) //if empty
+            return null;
 
-        //if species is same as root's key then this is the node to be deleted
-        else{
-            //node with only one child or no child
-            if (root.getLeftSpecieData() == null)
-                return root.getRightSpecieData();
-            else if (root.getRightSpecieData() == null)
-                return root.getLeftSpecieData();
+        PhylogeneticBSTNode current = root;
+        PhylogeneticBSTNode parent = root;
+        boolean isLeftChild = true;
 
-            //node with two children: get the inorder successor (smalles in the right subtree)
-            root.getSpecieData().setLineage(minValue(root.getRightSpecieData()));
-            root.getRightSpecieData().setRightSpecieData(deleteSpecies(root.getRightSpecieData(), root.getSpecieData()));
+        //find the specie first
+        while(!compareSpecies(current.getSpecieData(), species)){
+            parent = current;
+            if (species.getLineage() < current.getSpecieData().getLineage()){ //go left
+                isLeftChild = true;
+                current = current.getLeftSpecieData();
+            }
+            else{ //go right
+                isLeftChild = false;
+                current = current.getRightSpecieData();
+            }
+            if(current == null)
+                return null;
         }
 
-        return root;
-    }
-
-    private int minValue(PhylogeneticBSTNode root){
-        int min = root.getSpecieData().getLineage();
-        while (root.getLeftSpecieData() != null){
-            min = root.getLeftSpecieData().getSpecieData().getLineage();
-            root = root.getLeftSpecieData();
+        //after we find node, verify that it has no children
+        if(current.getLeftSpecieData() == null && current.getRightSpecieData() == null){
+            if (current == root) //if root
+                root = null;    //tree is empty
+            else if(isLeftChild)
+                parent.setLeftSpecieData(null); //disconnect
+            else                                //from parent
+                parent.setRightSpecieData(null);
         }
-        return min;
+
+        //if no right child, replace with left subtree
+        else if(current.getRightSpecieData() == null) {
+            if (current == root)
+                root = current.getLeftSpecieData();
+            else if (isLeftChild)
+                parent.setLeftSpecieData(current.getLeftSpecieData());
+            else
+                parent.setRightSpecieData(current.getLeftSpecieData());
+        }
+
+        //if no left child, replace with right subtree
+        else if (current.getLeftSpecieData() == null){
+            if (current == root)
+                root = current.getRightSpecieData();
+            else if (isLeftChild)
+                parent.setLeftSpecieData(current.getRightSpecieData());
+            else
+                parent.setRightSpecieData(current.getRightSpecieData());
+        }
+
+        else { //two children
+            PhylogeneticBSTNode successor = getSuccessor(current);
+
+            //connect parent of current to successor instead
+            if (current == root)
+                root = successor;
+            else if (isLeftChild)
+                parent.setLeftSpecieData(successor);
+            else
+                parent.setRightSpecieData(successor);
+
+            //connect successor to current's left child
+            successor.setLeftSpecieData(current.getLeftSpecieData());
+
+        }
+        return current;
+
     }
 
+    private PhylogeneticBSTNode getSuccessor(PhylogeneticBSTNode deleteSpecie){
+        PhylogeneticBSTNode parent = deleteSpecie;
+        PhylogeneticBSTNode successor = deleteSpecie;
+        PhylogeneticBSTNode current = deleteSpecie.getRightSpecieData();
+
+        while (current != null){
+            parent = successor;
+            successor = current;
+            current = current.getLeftSpecieData();
+        }
+
+        if(successor != deleteSpecie.getRightSpecieData()){
+            parent.setLeftSpecieData(successor.getRightSpecieData());
+            successor.setRightSpecieData(deleteSpecie.getRightSpecieData());
+        }
+        return successor;
+    }
+//TEST: src\com\cmsc122lab\lab5\tests\test-inputs.txt
     @Override
     public PhylogeneticBSTNode searchSpecies(PhylogeneticBSTNode root, Species species) {
-        // implement tree search here and modify return value
-        //Base cases: root is null or species is present at root
-        if (root == null || root.getSpecieData() == species)
-            return root;
 
-        //if species is greater than root's species
-        if (root.getSpecieData().getLineage() < species.getLineage())
-            return searchSpecies(root.getRightSpecieData(), species);
-        //key is smaller than root's key
-        return searchSpecies(root.getLeftSpecieData(), species);
+        if(root == null)
+            return null;
+
+        PhylogeneticBSTNode current = root; //start at root
+        while(!compareSpecies(current.getSpecieData(), species)){
+            if(species.getLineage() < current.getSpecieData().getLineage())
+                current = current.getLeftSpecieData();
+            else
+                current = current.getRightSpecieData();
+            if (current == null)
+                return null;
+        }
+        return current;
     }
 
     @Override
