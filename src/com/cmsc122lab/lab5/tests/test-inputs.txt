@@ -1,0 +1,5 @@
+insert Fish 100
+insert Turtle 20
+insert Bird 25
+insert Human 36
+insert Snake 150
