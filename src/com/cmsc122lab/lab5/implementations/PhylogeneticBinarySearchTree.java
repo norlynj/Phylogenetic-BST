@@ -60,7 +60,7 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
         if(species.getLineage() < root.getSpecieData().getLineage()){
             root.setLeftSpecieData(insertSpecies(root.getLeftSpecieData(), species));
         }
-        else if (species.getLineage() >= root.getSpecieData().getLineage()){
+        else if (species.getLineage() > root.getSpecieData().getLineage()){
             root.setRightSpecieData(insertSpecies(root.getRightSpecieData(), species));
         }
 
@@ -155,7 +155,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
         if(successor != deleteSpecie.getRightSpecieData()){
             parent.setLeftSpecieData(successor.getRightSpecieData());
             successor.setRightSpecieData(deleteSpecie.getRightSpecieData());
-            System.out.println("successor:"); displaySpeciesData(successor.getSpecieData());
         }
 
         return successor;

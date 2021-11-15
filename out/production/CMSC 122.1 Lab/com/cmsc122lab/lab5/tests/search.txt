@@ -1,0 +1,5 @@
+search Fish 100
+search Fish 25
+search Turtle 20
+search Dog 20
+search Bird 25

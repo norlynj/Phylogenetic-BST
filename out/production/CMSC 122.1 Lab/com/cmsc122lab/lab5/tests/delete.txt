@@ -1,0 +1,18 @@
+delete Bird 100
+delete Dog 18
+delete Monkey 18
+inorder
+preorder
+postorder
+delete Frog 160
+inorder
+preorder
+postorder
+delete Bird 25
+inorder
+preorder
+postorder
+delete Snake 150
+inorder 
+preorder
+postorder
