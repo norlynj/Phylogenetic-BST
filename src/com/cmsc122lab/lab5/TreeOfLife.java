@@ -51,8 +51,10 @@ public class TreeOfLife {
                     String inputArgumentA = tokens[1];
                     String inputArgumentB = tokens[2];
                     System.out.println("Performing " + command + " to BST...");
-                    System.out.println("Species Name: " + inputArgumentA + "\nSpecies Lineage: "+inputArgumentB);
-                    Species species = new Species(inputArgumentA, Integer.parseInt(inputArgumentB));
+                    System.out.println("Species Name: " + inputArgumentA +
+                            "\nSpecies Lineage: "+inputArgumentB);
+                    Species species = new Species(inputArgumentA,
+                            Integer.parseInt(inputArgumentB));
 
                     switch (command.toLowerCase()){
                         case "insert":
@@ -70,7 +72,6 @@ public class TreeOfLife {
             }
         } catch (Exception e){
             System.out.println("Invalid input...");
-            e.printStackTrace();
         }
     }
 

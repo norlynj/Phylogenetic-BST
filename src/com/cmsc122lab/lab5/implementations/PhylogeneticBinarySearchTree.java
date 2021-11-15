@@ -5,6 +5,7 @@ import com.cmsc122lab.lab5.models.PhylogeneticBSTNode;
 import com.cmsc122lab.lab5.models.Species;
 
 public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
+
     private PhylogeneticBSTNode root;
     public PhylogeneticBinarySearchTree() {
         this.root = null;
@@ -59,7 +60,7 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
         if(species.getLineage() < root.getSpecieData().getLineage()){
             root.setLeftSpecieData(insertSpecies(root.getLeftSpecieData(), species));
         }
-        else if (species.getLineage() > root.getSpecieData().getLineage()){
+        else if (species.getLineage() >= root.getSpecieData().getLineage()){
             root.setRightSpecieData(insertSpecies(root.getRightSpecieData(), species));
         }
 
@@ -69,13 +70,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
 
     @Override
     public PhylogeneticBSTNode deleteSpecies(PhylogeneticBSTNode root, Species species) {
-        /*
-        * Three cases to consider when deleting a node
-        * 1. The node to be deleted is a leaf (has no children)
-        * 2. The node to be deleted has one child
-        * 3. The node to be deleted has two children
-        */
-
         if(root == null) //if empty
             return null;
 
@@ -107,9 +101,8 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
             else                                //from parent
                 parent.setRightSpecieData(null);
         }
-
-        //if no right child, replace with left subtree
         else if(current.getRightSpecieData() == null) {
+            //if no right child, replace with left subtree
             if (current == root)
                 root = current.getLeftSpecieData();
             else if (isLeftChild)
@@ -117,9 +110,8 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
             else
                 parent.setRightSpecieData(current.getLeftSpecieData());
         }
-
-        //if no left child, replace with right subtree
         else if (current.getLeftSpecieData() == null){
+            //if no left child, replace with right subtree
             if (current == root)
                 root = current.getRightSpecieData();
             else if (isLeftChild)
@@ -127,7 +119,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
             else
                 parent.setRightSpecieData(current.getRightSpecieData());
         }
-
         else { //two children
             PhylogeneticBSTNode successor = getSuccessor(current);
 
@@ -141,12 +132,15 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
 
             //connect successor to current's left child
             successor.setLeftSpecieData(current.getLeftSpecieData());
-
         }
         return current;
 
     }
 
+    /*
+    * returns node with next-highest value after deleteSpecie
+    * goes to right child, then right child's descendants
+    * */
     private PhylogeneticBSTNode getSuccessor(PhylogeneticBSTNode deleteSpecie){
         PhylogeneticBSTNode parent = deleteSpecie;
         PhylogeneticBSTNode successor = deleteSpecie;
@@ -161,7 +155,9 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
         if(successor != deleteSpecie.getRightSpecieData()){
             parent.setLeftSpecieData(successor.getRightSpecieData());
             successor.setRightSpecieData(deleteSpecie.getRightSpecieData());
+            System.out.println("successor:"); displaySpeciesData(successor.getSpecieData());
         }
+
         return successor;
     }
 //TEST: src\com\cmsc122lab\lab5\tests\test-inputs.txt
@@ -185,11 +181,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
 
     @Override
     public void traversePhylogeneticBSTInorder(PhylogeneticBSTNode root) {
-        /* Algorithm
-        * 1. Traverse the left subtree, i.e., call Inorder(left-subtree)
-        * 2. Visit the root.
-        * 3. Traverse the right subtree, i.e., call Inorder(right-subtree)
-        */
         if(root != null){
             traversePhylogeneticBSTInorder(root.getLeftSpecieData());
             displaySpeciesData(root.getSpecieData());
@@ -199,11 +190,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
 
     @Override
     public void traversePhylogeneticBSTPreorder(PhylogeneticBSTNode root) {
-        /* Algorithm
-         * 1. Visit the root.
-         * 2.Traverse the left subtree, i.e., call Preorder(left-subtree)
-         * 3. Traverse the right subtree, i.e., call Preorder(right-subtree)
-         */
         if (root != null){
             displaySpeciesData(root.getSpecieData());
             traversePhylogeneticBSTPreorder(root.getLeftSpecieData());
@@ -215,12 +201,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
     @Override
     public void traversePhylogeneticBSTPostorder(PhylogeneticBSTNode root) {
         if(root != null){
-            /* Algorithm
-             * 1. Traverse the left subtree, i.e., call Postorder(left-subtree)
-             * 2. Traverse the right subtree, i.e., call Postorder(right-subtree)
-             * 3. Visit the root.
-             */
-
             traversePhylogeneticBSTPostorder(root.getLeftSpecieData());
             traversePhylogeneticBSTPostorder(root.getRightSpecieData());
             displaySpeciesData(root.getSpecieData());

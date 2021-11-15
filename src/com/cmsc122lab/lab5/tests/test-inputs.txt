@@ -3,3 +3,8 @@ insert Turtle 20
 insert Bird 25
 insert Human 36
 insert Snake 150
+insert Monkey 18
+insert Frog 160
+insert Lizard 120
+insert Butterfly 22
+insert Cat 166

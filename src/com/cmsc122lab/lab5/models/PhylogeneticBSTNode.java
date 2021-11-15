@@ -1,5 +1,4 @@
 package com.cmsc122lab.lab5.models;
-
 public class PhylogeneticBSTNode {
     private final Species specieData;
     private PhylogeneticBSTNode rightSpecieData;
