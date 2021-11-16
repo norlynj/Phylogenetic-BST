@@ -51,6 +51,7 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
     @Override // a recursive function to insert a new key in BST
     public PhylogeneticBSTNode insertSpecies(PhylogeneticBSTNode root, Species species) {
         //if tree is empty, return a new node
+        //if tree is empty, return a new node
         if(root == null) {
             root = new PhylogeneticBSTNode(species);
             return root;
@@ -75,6 +76,7 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
 
         PhylogeneticBSTNode current = root;
         PhylogeneticBSTNode parent = root;
+        PhylogeneticBSTNode rootNode = root;
         boolean isLeftChild = true;
 
         //find the specie first
@@ -91,7 +93,6 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
             if(current == null)
                 return null;
         }
-
         //after we find node, verify that it has no children
         if(current.getLeftSpecieData() == null && current.getRightSpecieData() == null){
             if (current == root) //if root
@@ -121,20 +122,23 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
         }
         else { //two children
             PhylogeneticBSTNode successor = getSuccessor(current);
-
             //connect parent of current to successor instead
-            if (current == root)
-                root = successor;
+            if (current == root) {//set root to successor
+                root.getSpecieData().setName(successor.getSpecieData().getName());
+                root.getSpecieData().setLineage(successor.getSpecieData().getLineage());
+            }
             else if (isLeftChild)
                 parent.setLeftSpecieData(successor);
             else
                 parent.setRightSpecieData(successor);
-
             //connect successor to current's left child
             successor.setLeftSpecieData(current.getLeftSpecieData());
+
+            ///without this, it will return and print
+            // the new root node (if current=root) instead of the specie deleted
+            return new PhylogeneticBSTNode(species);
         }
         return current;
-
     }
 
     /*

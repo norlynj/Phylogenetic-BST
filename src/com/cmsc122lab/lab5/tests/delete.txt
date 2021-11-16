@@ -16,3 +16,7 @@ delete Snake 150
 inorder 
 preorder
 postorder
+delete Fish 100
+inorder 
+preorder
+postorder
