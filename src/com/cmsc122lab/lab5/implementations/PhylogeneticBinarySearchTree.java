@@ -163,7 +163,7 @@ public class PhylogeneticBinarySearchTree implements PhylogeneticBSTADT {
 
         return successor;
     }
-//TEST: src\com\cmsc122lab\lab5\tests\test-inputs.txt
+
     @Override
     public PhylogeneticBSTNode searchSpecies(PhylogeneticBSTNode root, Species species) {
 

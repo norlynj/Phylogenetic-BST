@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class TreeOfLife {
     public static PhylogeneticBinarySearchTree bst = new PhylogeneticBinarySearchTree();
 
+    //TEST: src\com\cmsc122lab\lab5\tests\test-inputs.txt
     public static void main(String[] args) throws FileNotFoundException {
         Scanner sc = new Scanner(System.in);
         do{
